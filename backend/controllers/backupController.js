@@ -1,25 +1,64 @@
-const backupUtils = require('../utils/backupUtils');
+const backupService = require('../services/backupService');
+const dataMasking = require('../utils/dataMasking');
 const fs = require('fs');
 const path = require('path');
-const backupConfig = require('../config/backupConfig');
 
 // 创建备份
 exports.createBackup = async (req, res) => {
   try {
-    const result = await backupUtils.createBackup();
-    if (result.success) {
-      res.status(201).json({
-        success: true,
-        message: '备份创建成功',
-        backupPath: result.backupPath
-      });
-    } else {
-      res.status(500).json({
+    const { collectionName } = req.query;
+    const backupPath = await backupService.backupDatabase(collectionName);
+    res.status(201).json({
+      success: true,
+      message: '备份创建成功',
+      backupPath
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: '服务器错误',
+      error: error.message
+    });
+  }
+};
+
+// 数据脱敏示例
+exports.maskDataExample = (req, res) => {
+  try {
+    const { type, data } = req.body;
+
+    if (!type || !data) {
+      return res.status(400).json({
         success: false,
-        message: '备份创建失败',
-        error: result.error
+        message: '请提供脱敏类型和数据'
       });
     }
+
+    let maskedData;
+    switch (type) {
+      case 'email':
+        maskedData = dataMasking.maskEmail(data);
+        break;
+      case 'phone':
+        maskedData = dataMasking.maskPhone(data);
+        break;
+      case 'idCard':
+        maskedData = dataMasking.maskIdCard(data);
+        break;
+      case 'bankCard':
+        maskedData = dataMasking.maskBankCard(data);
+        break;
+      default:
+        maskedData = dataMasking.maskCustom(data);
+    }
+
+    res.status(200).json({
+      success: true,
+      data: {
+        original: data,
+        masked: maskedData
+      }
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -33,6 +72,7 @@ exports.createBackup = async (req, res) => {
 exports.restoreBackup = async (req, res) => {
   try {
     const { backupPath } = req.body;
+    const { dropCollection } = req.query;
 
     if (!backupPath) {
       return res.status(400).json({
@@ -41,19 +81,29 @@ exports.restoreBackup = async (req, res) => {
       });
     }
 
-    const result = await backupUtils.restoreBackup(backupPath);
-    if (result.success) {
-      res.status(200).json({
-        success: true,
-        message: '备份恢复成功'
-      });
-    } else {
-      res.status(500).json({
-        success: false,
-        message: '备份恢复失败',
-        error: result.error
-      });
-    }
+    await backupService.restoreDatabase(backupPath, dropCollection !== 'false');
+    res.status(200).json({
+      success: true,
+      message: '备份恢复成功'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: '服务器错误',
+      error: error.message
+    });
+  }
+};
+
+// 设置自动备份
+exports.setAutoBackup = (req, res) => {
+  try {
+    const { interval, collectionName } = req.body;
+    backupService.autoBackup(interval, collectionName);
+    res.status(200).json({
+      success: true,
+      message: '自动备份已设置'
+    });
   } catch (error) {
     res.status(500).json({
       success: false,

@@ -18,29 +18,55 @@ export default defineConfig({
   routes: [
     {
       path: '/',
-      redirect: '/home',
-    },
-    {
-      name: '首页',
-      path: '/home',
-      component: './Home',
-    },
-    {
-      name: '权限演示',
-      path: '/access',
-      component: './Access',
-    },
-    {
-      name: ' CRUD 示例',
-      path: '/table',
-      component: './Table',
-    },
-    {
-      name: '用户管理',
-      path: '/users',
-      component: './Users',
-    },
+      component: './index',
+      routes: [
+        {
+          path: '/',
+          redirect: '/home',
+        },
+        {
+          name: '首页',
+          path: '/home',
+          component: './Home',
+          icon: 'home',
+        },
+        {
+          name: '权限演示',
+          path: '/access',
+          component: './Access',
+          icon: 'key',
+        },
+        {
+          name: 'CRUD 示例',
+          path: '/table',
+          component: './Table',
+          icon: 'table',
+        },
+        {
+          name: '用户管理',
+          path: '/users',
+          component: './Users',
+          icon: 'user',
+        },
+        {
+          name: '数据可视化',
+          path: '/dashboard',
+          component: './Dashboard',
+          icon: 'dashboard',
+        }
+      ]
+    }
   ],
+  locale: {
+    default: 'zh-CN',
+    antd: true,
+    baseNavigator: true,
+  },
+  lessLoader: {
+    modifyVars: {
+      '@border-radius-base': '8px',
+    },
+  },
   npmClient: 'npm',
 });
 

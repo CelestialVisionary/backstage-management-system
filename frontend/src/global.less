@@ -1,0 +1,116 @@
+// src/global.less
+// 全局样式
+
+// 响应式样式
+@media screen and (max-width: 576px) {
+  .site-layout {
+    margin-left: 0 !important;
+  }
+
+  .mobile-menu-button {
+    display: block !important;
+  }
+}
+
+// 暗色模式样式
+.dark-mode {
+  body {
+    background-color: #141414;
+    color: #ffffff;
+  }
+
+  .site-layout-background {
+    background-color: #1f1f1f !important;
+  }
+
+  .ant-card {
+    background-color: #2c2c2c;
+    color: #ffffff;
+  }
+
+  .ant-table {
+    background-color: #2c2c2c;
+    color: #ffffff;
+  }
+
+  .ant-table-thead > tr > th {
+    background-color: #3c3c3c !important;
+    color: #ffffff !important;
+  }
+
+  .ant-table-tbody > tr > td {
+    background-color: #2c2c2c !important;
+    color: #ffffff !important;
+    border-color: #444444 !important;
+  }
+
+  .ant-table-tbody > tr.ant-table-row-hover > td {
+    background-color: #3a3a3a !important;
+  }
+
+  .ant-modal-content {
+    background-color: #2c2c2c !important;
+    color: #ffffff !important;
+  }
+
+  .ant-input {
+    background-color: #3c3c3c !important;
+    color: #ffffff !important;
+    border-color: #555555 !important;
+  }
+
+  .ant-select-selector {
+    background-color: #3c3c3c !important;
+    color: #ffffff !important;
+    border-color: #555555 !important;
+  }
+
+  .ant-select-dropdown {
+    background-color: #3c3c3c !important;
+    color: #ffffff !important;
+  }
+
+  .ant-btn {
+    background-color: #40a9ff !important;
+    color: #ffffff !important;
+  }
+
+  .ant-btn-default {
+    background-color: #3c3c3c !important;
+    color: #ffffff !important;
+    border-color: #555555 !important;
+  }
+}
+
+// 亮色模式样式
+.light-mode {
+  body {
+    background-color: #ffffff;
+    color: #333333;
+  }
+
+  .site-layout-background {
+    background-color: #ffffff !important;
+  }
+}
+
+// 全局样式
+body {
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease;
+}
+
+.ant-layout {
+  transition: all 0.3s ease;
+}
+
+// 确保内容区域有足够的边距
+.ant-layout-content {
+  padding: 24px;
+}
+
+// 移动端菜单按钮
+.mobile-menu-button {
+  display: none;
+}

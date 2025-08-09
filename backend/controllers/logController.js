@@ -1,5 +1,5 @@
-const Log = require('../models/logModel');
-const User = require('../models/userModel');
+const Log = require('../modules/logs/models/logModel');
+const User = require('../modules/users/models/userModel');
 
 // 创建日志
 exports.createLog = async (req, res) => {

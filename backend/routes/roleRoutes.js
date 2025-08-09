@@ -12,7 +12,7 @@ router.post('/', authMiddleware.protect, authMiddleware.restrictTo('admin'), rol
 router.get('/', authMiddleware.protect, cacheMiddleware(CACHE_KEYS.ROLE_LIST), roleController.getRoles);
 
 // 获取单个角色
-router.get('/:id', authMiddleware.protect, roleController.getRole);
+router.get('/:id', authMiddleware.protect, cacheMiddleware(CACHE_KEYS.ROLE_DETAIL), roleController.getRole);
 
 // 更新角色
 router.put('/:id', authMiddleware.protect, authMiddleware.restrictTo('admin'), clearCacheMiddleware(CACHE_KEYS.ROLE_LIST), roleController.updateRole);

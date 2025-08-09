@@ -15,4 +15,10 @@ router.get('/', authMiddleware.protect, authMiddleware.restrictTo('admin'), back
 // 删除备份
 router.delete('/', authMiddleware.protect, authMiddleware.restrictTo('admin'), backupController.deleteBackup);
 
+// 数据脱敏示例
+router.post('/mask', authMiddleware.protect, backupController.maskDataExample);
+
+// 设置自动备份
+router.post('/auto', authMiddleware.protect, authMiddleware.restrictTo('admin'), backupController.setAutoBackup);
+
 module.exports = router;

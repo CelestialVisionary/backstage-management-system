@@ -1,6 +1,6 @@
-const User = require('../models/userModel');
+const User = require('../modules/users/models/userModel');
 const mongoose = require('mongoose');
-const Log = require('../models/logModel');
+const Log = require('../modules/logs/models/logModel');
 const moment = require('moment');
 
 // 获取用户统计数据
@@ -9,18 +9,12 @@ exports.getUserStats = async (req, res) => {
     // 获取用户总数
     const totalUsers = await User.countDocuments();
 
-    // 获取用户按角色分布
+    // 获取用户按角色分布 (优化版)
     const usersByRole = await User.aggregate([
-      {
-        $group: {
-          _id: '$role',
-          count: { $sum: 1 }
-        }
-      },
       {
         $lookup: {
           from: 'roles',
-          localField: '_id',
+          localField: 'role',
           foreignField: '_id',
           as: 'roleInfo'
         }
@@ -29,35 +23,49 @@ exports.getUserStats = async (req, res) => {
         $unwind: '$roleInfo'
       },
       {
-        $project: {
-          roleName: '$roleInfo.name',
-          count: 1
-        }
-      }
-    ]);
-
-    // 获取用户注册趋势（按月份）
-    const registrationTrend = await User.aggregate([
-      {
         $group: {
-          _id: {
-            year: { $year: '$createdAt' },
-            month: { $month: '$createdAt' }
-          },
+          _id: '$roleInfo.name',
           count: { $sum: 1 }
         }
       },
       {
-        $sort: {
-          '_id.year': 1,
-          '_id.month': 1
+        $project: {
+          roleName: '$_id',
+          count: 1,
+          _id: 0
         }
       },
       {
+        $sort: { count: -1 }
+      }
+    ]);
+
+    // 获取用户注册趋势（按月份，优化版）
+    const registrationTrend = await User.aggregate([
+      {
         $project: {
-          month: '$_id.month',
-          year: '$_id.year',
-          count: 1
+          month: {
+            $dateToString: {
+              format: '%Y-%m',
+              date: '$createdAt'
+            }
+          }
+        }
+      },
+      {
+        $group: {
+          _id: '$month',
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $sort: { '_id': 1 }
+      },
+      {
+        $project: {
+          month: '$_id',
+          count: 1,
+          _id: 0
         }
       }
     ]);
@@ -72,13 +80,16 @@ exports.getUserStats = async (req, res) => {
   }
 };
 
-// 获取系统概览统计
+// 获取系统概览统计 (优化版 - 并行查询)
 exports.getSystemOverview = async (req, res) => {
   try {
-    const totalUsers = await User.countDocuments();
-    const totalRoles = await mongoose.model('Role').countDocuments();
-    const totalLogs = await Log.countDocuments();
-    const totalErrors = await Log.countDocuments({ isError: true });
+    // 并行执行所有计数查询以提高效率
+    const [totalUsers, totalRoles, totalLogs, totalErrors] = await Promise.all([
+      User.countDocuments(),
+      mongoose.model('Role').countDocuments(),
+      Log.countDocuments(),
+      Log.countDocuments({ isError: true })
+    ]);
 
     res.json({
       totalUsers,
@@ -91,7 +102,7 @@ exports.getSystemOverview = async (req, res) => {
   }
 };
 
-// 获取活跃用户统计
+// 获取活跃用户统计 (优化版)
 exports.getActiveUsers = async (req, res) => {
   try {
     const { period } = req.query; // day, week, month
@@ -110,11 +121,16 @@ exports.getActiveUsers = async (req, res) => {
         break;
     }
 
-    // 获取活跃用户（有登录记录的用户）
-    const activeUsers = await Log.aggregate([
-      { $match: { action: 'user:login', createdAt: { $gte: startDate } } },
-      { $group: { _id: '$user' } },
-      { $count: 'count' }
+    // 并行执行查询以提高效率
+    const [activeUsers, totalUsers] = await Promise.all([
+      // 获取活跃用户（有登录记录的用户）
+      Log.aggregate([
+        { $match: { action: 'user:login', createdAt: { $gte: startDate } } },
+        { $group: { _id: '$user' } },
+        { $count: 'count' }
+      ]),
+      // 获取用户总数
+      User.countDocuments()
     ]);
 
     const count = activeUsers.length > 0 ? activeUsers[0].count : 0;
@@ -146,26 +162,46 @@ exports.getUserActions = async (req, res) => {
   }
 };
 
-// 获取错误统计
+// 获取错误统计 (优化版)
 exports.getErrorStats = async (req, res) => {
   try {
-    // 错误类型分布
-    const errorTypes = await Log.aggregate([
-      { $match: { isError: true } },
-      { $group: { _id: '$action', count: { $sum: 1 } } },
-      { $sort: { count: -1 } }
-    ]);
-
-    // 错误时间趋势（按天）
-    const errorTrend = await Log.aggregate([
-      { $match: { isError: true } },
-      { $group: {
-          _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
-          count: { $sum: 1 }
+    // 并行执行两个聚合查询以提高效率
+    const [errorTypes, errorTrend] = await Promise.all([
+      // 错误类型分布
+      Log.aggregate([
+        { $match: { isError: true } },
+        { $group: { _id: '$action', count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+        { $project: {
+            action: '$_id',
+            count: 1,
+            _id: 0
+          }
         }
-      },
-      { $sort: { '_id': 1 } },
-      { $limit: 30 }
+      ]),
+      // 错误时间趋势（按天）
+      Log.aggregate([
+        { $match: { isError: true } },
+        { $project: {
+            date: {
+              $dateToString: { format: '%Y-%m-%d', date: '$createdAt' }
+            }
+          }
+        },
+        { $group: {
+            _id: '$date',
+            count: { $sum: 1 }
+          }
+        },
+        { $sort: { '_id': 1 } },
+        { $limit: 30 },
+        { $project: {
+            date: '$_id',
+            count: 1,
+            _id: 0
+          }
+        }
+      ])
     ]);
 
     res.json({

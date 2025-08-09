@@ -1,0 +1,16 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# 运行代码规范检查
+npm run lint
+
+# 运行测试
+npm test
+
+# 如果有错误，阻止提交
+if [ $? -ne 0 ]; then
+  echo "提交失败：代码规范检查或测试未通过。"
+  exit 1
+fi
+
+exit 0

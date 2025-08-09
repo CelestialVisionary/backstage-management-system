@@ -6,15 +6,19 @@
     "build": "max build",
     "format": "prettier --cache --write .",
     "prepare": "husky",
-    "postinstall": "max setup",
+    "postinstall": "",
     "setup": "max setup",
-    "start": "npm run dev"
+    "start": "npm run dev",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
     "@ant-design/pro-components": "^2.4.4",
     "@umijs/max": "^4.4.12",
-    "antd": "^5.4.0"
+    "antd": "^5.4.0",
+    "echarts": "^5.4.3",
+    "echarts-for-react": "^3.0.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.33",

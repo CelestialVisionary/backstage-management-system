@@ -2,7 +2,7 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const backupConfig = require('../config/backupConfig');
-const logModel = require('../models/logModel');
+const logModel = require('../modules/logs/models/logModel');
 
 // 确保备份目录存在
 function ensureBackupDirExists() {
@@ -30,7 +30,7 @@ async function createBackup() {
     // 记录备份日志
     await logModel.create({
       action: 'backup:create',
-      user: 'system',
+      user: '6892c75b3c3e22c1f1be69ab', // 使用管理员角色ID作为系统操作的用户
       details: { backupPath }
     });
 
@@ -44,7 +44,7 @@ async function createBackup() {
     // 记录错误日志
     await logModel.create({
       action: 'backup:create',
-      user: 'system',
+      user: '6892c75b3c3e22c1f1be69ab', // 使用管理员角色ID作为系统操作的用户
       details: { error: error.message },
       isError: true
     });

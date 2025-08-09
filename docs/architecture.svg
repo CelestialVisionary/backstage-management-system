@@ -1,0 +1,59 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="800" height="600" fill="#f9f9f9"/>
+  
+  <!-- 标题 -->
+  <text x="400" y="40" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold">后台管理系统架构图</text>
+  
+  <!-- 前端部分 -->
+  <rect x="50" y="80" width="300" height="450" rx="10" fill="#e6f7ff" stroke="#1890ff" stroke-width="2"/>
+  <text x="200" y="110" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">前端 (Frontend)</text>
+  
+  <!-- 前端组件 -->
+  <rect x="70" y="140" width="260" height="60" rx="5" fill="#bae7ff" stroke="#40a9ff" stroke-width="1"/>
+  <text x="200" y="175" font-family="Arial" font-size="14" text-anchor="middle">UmiJS + Ant Design Pro</text>
+  
+  <rect x="70" y="220" width="260" height="40" rx="5" fill="#bae7ff" stroke="#40a9ff" stroke-width="1"/>
+  <text x="200" y="245" font-family="Arial" font-size="14" text-anchor="middle">路由管理 (Routes)</text>
+  
+  <rect x="70" y="280" width="260" height="40" rx="5" fill="#bae7ff" stroke="#40a9ff" stroke-width="1"/>
+  <text x="200" y="305" font-family="Arial" font-size="14" text-anchor="middle">状态管理 (Model)</text>
+  
+  <rect x="70" y="340" width="260" height="40" rx="5" fill="#bae7ff" stroke="#40a9ff" stroke-width="1"/>
+  <text x="200" y="365" font-family="Arial" font-size="14" text-anchor="middle">权限控制 (Access)</text>
+  
+  <rect x="70" y="400" width="260" height="40" rx="5" fill="#bae7ff" stroke="#40a9ff" stroke-width="1"/>
+  <text x="200" y="425" font-family="Arial" font-size="14" text-anchor="middle">国际化 (Locale)</text>
+  
+  <rect x="70" y="460" width="260" height="40" rx="5" fill="#bae7ff" stroke="#40a9ff" stroke-width="1"/>
+  <text x="200" y="485" font-family="Arial" font-size="14" text-anchor="middle">API请求 (Request)</text>
+  
+  <!-- 后端部分 -->
+  <rect x="450" y="80" width="300" height="450" rx="10" fill="#fff2e8" stroke="#fa8c16" stroke-width="2"/>
+  <text x="600" y="110" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">后端 (Backend)</text>
+  
+  <!-- 后端组件 -->
+  <rect x="470" y="140" width="260" height="60" rx="5" fill="#ffe7ba" stroke="#faad14" stroke-width="1"/>
+  <text x="600" y="175" font-family="Arial" font-size="14" text-anchor="middle">Node.js + Express</text>
+  
+  <rect x="470" y="220" width="260" height="40" rx="5" fill="#ffe7ba" stroke="#faad14" stroke-width="1"/>
+  <text x="600" y="245" font-family="Arial" font-size="14" text-anchor="middle">路由系统 (Routes)</text>
+  
+  <rect x="470" y="280" width="260" height="40" rx="5" fill="#ffe7ba" stroke="#faad14" stroke-width="1"/>
+  <text x="600" y="305" font-family="Arial" font-size="14" text-anchor="middle">控制器 (Controllers)</text>
+  
+  <rect x="470" y="340" width="260" height="40" rx="5" fill="#ffe7ba" stroke="#faad14" stroke-width="1"/>
+  <text x="600" y="365" font-family="Arial" font-size="14" text-anchor="middle">数据模型 (Models)</text>
+  
+  <rect x="470" y="400" width="260" height="40" rx="5" fill="#ffe7ba" stroke="#faad14" stroke-width="1"/>
+  <text x="600" y="425" font-family="Arial" font-size="14" text-anchor="middle">数据库 (MongoDB)</text>
+  
+  <rect x="470" y="460" width="260" height="40" rx="5" fill="#ffe7ba" stroke="#faad14" stroke-width="1"/>
+  <text x="600" y="485" font-family="Arial" font-size="14" text-anchor="middle">身份验证 (JWT)</text>
+  
+  <!-- 连接线 -->
+  <path d="M350 300 H450" stroke="#999" stroke-width="2" stroke-dasharray="5,5"/>
+  <circle cx="350" cy="300" r="5" fill="#999"/>
+  <circle cx="450" cy="300" r="5" fill="#999"/>
+  <text x="400" y="285" font-family="Arial" font-size="12" text-anchor="middle">API通信</text>
+</svg>

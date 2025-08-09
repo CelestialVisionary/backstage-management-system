@@ -1,4 +1,4 @@
-const Log = require('../models/logModel');
+const Log = require('../modules/logs/models/logModel');
 
 // 日志中间件
 exports.logActions = (action) => {

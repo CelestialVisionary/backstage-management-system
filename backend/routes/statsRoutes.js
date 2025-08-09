@@ -12,15 +12,15 @@ router.get('/users', authMiddleware.protect, authMiddleware.hasPermission('read:
 router.get('/overview', authMiddleware.protect, authMiddleware.hasPermission('read:stats'), cacheMiddleware(CACHE_KEYS.STATS_OVERVIEW), statsController.getSystemOverview);
 
 // 获取活跃用户统计
-router.get('/active-users', authMiddleware.protect, authMiddleware.hasPermission('read:stats'), statsController.getActiveUsers);
+router.get('/active-users', authMiddleware.protect, authMiddleware.hasPermission('read:stats'), cacheMiddleware(CACHE_KEYS.USER_STATS), statsController.getActiveUsers);
 
 // 获取用户操作统计
-router.get('/user-actions', authMiddleware.protect, authMiddleware.hasPermission('read:stats'), statsController.getUserActions);
+router.get('/user-actions', authMiddleware.protect, authMiddleware.hasPermission('read:stats'), cacheMiddleware(CACHE_KEYS.USER_ACTIONS), statsController.getUserActions);
 
 // 获取错误统计
-router.get('/errors', authMiddleware.protect, authMiddleware.hasPermission('read:stats'), statsController.getErrorStats);
+router.get('/errors', authMiddleware.protect, authMiddleware.hasPermission('read:stats'), cacheMiddleware(CACHE_KEYS.ERROR_STATS), statsController.getErrorStats);
 
 // 获取用户增长预测
-router.get('/growth-prediction', authMiddleware.protect, authMiddleware.hasPermission('read:stats'), statsController.getUserGrowthPrediction);
+router.get('/growth-prediction', authMiddleware.protect, authMiddleware.hasPermission('read:stats'), cacheMiddleware(CACHE_KEYS.GROWTH_PREDICTION), statsController.getUserGrowthPrediction);
 
 module.exports = router;

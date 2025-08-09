@@ -1,7 +1,7 @@
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const xss = require('xss-clean');
-const hpp = require('hpp');
+// const hpp = require('hpp');
 const cors = require('cors');
 
 // 配置速率限制
@@ -36,8 +36,12 @@ exports.securityMiddleware = [
   // 防止XSS攻击
   xss(),
 
-  // 防止HTTP参数污染
-  hpp(),
+  // 防止HTTP参数污染 (暂时禁用，因为与Express 5.x不兼容)
+  // hpp({ 
+  //   useDefaults: true, 
+  //   checkBody: false, 
+  //   checkQuery: true 
+  // }),
 
   // 启用CORS
   cors({
