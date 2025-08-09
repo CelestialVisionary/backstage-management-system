@@ -58,7 +58,7 @@ describe('Role Controller Integration Test', () => {
     const adminUser = await User.create({
       username: 'adminuser',
       email: 'admin@example.com',
-      password: 'admin123',
+      password: process.env.TEST_ADMIN_PASSWORD || 'admin123',
       role: adminRole._id
     });
 
@@ -67,7 +67,7 @@ describe('Role Controller Integration Test', () => {
       .post('/api/users/login')
       .send({
         email: 'admin@example.com',
-        password: 'admin123'
+        password: process.env.TEST_ADMIN_PASSWORD || 'admin123'
       });
 
     token = response.body.token;

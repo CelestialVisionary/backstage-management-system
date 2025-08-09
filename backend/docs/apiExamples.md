@@ -270,7 +270,7 @@ async function login() {
       },
       body: JSON.stringify({
         email: 'admin@example.com',
-        password: 'admin123'
+        password: 'your_admin_password_here'
       })
     });
     const data = await response.json();

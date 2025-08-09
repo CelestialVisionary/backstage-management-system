@@ -55,7 +55,7 @@ describe('User Controller Integration Test', () => {
     testUser = await User.create({
       username: 'testuser',
       email: 'test@example.com',
-      password: 'password123',
+      password: process.env.TEST_USER_PASSWORD || 'password123',
       role: userRole._id
     });
 
@@ -63,7 +63,7 @@ describe('User Controller Integration Test', () => {
     adminUser = await User.create({
       username: 'adminuser',
       email: 'admin@example.com',
-      password: 'admin123',
+      password: process.env.TEST_ADMIN_PASSWORD || 'admin123',
       role: adminRole._id
     });
 
@@ -72,7 +72,7 @@ describe('User Controller Integration Test', () => {
       .post('/api/users/login')
       .send({
         email: 'admin@example.com',
-        password: 'admin123'
+        password: process.env.TEST_ADMIN_PASSWORD || 'admin123'
       });
 
     token = response.body.token;
@@ -84,7 +84,7 @@ describe('User Controller Integration Test', () => {
       .send({
         username: 'newuser',
         email: 'new@example.com',
-        password: 'newpassword123'
+        password: process.env.TEST_NEW_PASSWORD || 'newpassword123'
       });
 
     expect(response.status).toBe(201);
@@ -100,7 +100,7 @@ describe('User Controller Integration Test', () => {
       .send({
         username: 'testuser',
         email: 'test@example.com',
-        password: 'password123'
+        password: process.env.TEST_USER_PASSWORD || 'password123'
       });
 
     expect(response.status).toBe(400);
@@ -112,7 +112,7 @@ describe('User Controller Integration Test', () => {
       .post('/api/users/login')
       .send({
         email: 'test@example.com',
-        password: 'password123'
+        password: process.env.TEST_USER_PASSWORD || 'password123'
       });
 
     expect(response.status).toBe(200);

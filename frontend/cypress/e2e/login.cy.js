@@ -15,7 +15,7 @@ describe('Login Page', () => {
     const testUser = {
       username: 'testuser',
       email: 'test@example.com',
-      password: 'password123'
+      password: Cypress.env('TEST_USER_PASSWORD') || 'password123'
     };
 
     cy.createUser(testUser);

@@ -16,7 +16,7 @@ describe('User Model Test', () => {
     const userData = {
       username: 'testuser',
       email: 'test@example.com',
-      password: 'password123',
+      password: process.env.TEST_USER_PASSWORD || 'password123',
       role: role._id
     };
 
@@ -34,7 +34,7 @@ describe('User Model Test', () => {
     const user = await User.create({
       username: 'testuser',
       email: 'test@example.com',
-      password: 'password123',
+      password: process.env.TEST_USER_PASSWORD || 'password123',
       role: role._id
     });
 
@@ -55,7 +55,7 @@ describe('User Model Test', () => {
     try {
       await User.create({
         email: 'test@example.com',
-        password: 'password123',
+        password: process.env.TEST_USER_PASSWORD || 'password123',
         role: role._id
       });
       expect(false).toBe(true); // 不应该执行到这里
@@ -68,7 +68,7 @@ describe('User Model Test', () => {
     try {
       await User.create({
         username: 'testuser',
-        password: 'password123',
+        password: process.env.TEST_USER_PASSWORD || 'password123',
         role: role._id
       });
       expect(false).toBe(true); // 不应该执行到这里
@@ -95,7 +95,7 @@ describe('User Model Test', () => {
       await User.create({
         username: 'testuser',
         email: 'test@example.com',
-        password: 'password123'
+        password: process.env.TEST_USER_PASSWORD || 'password123'
       });
       expect(false).toBe(true); // 不应该执行到这里
     } catch (error) {

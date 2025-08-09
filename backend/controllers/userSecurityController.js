@@ -139,9 +139,17 @@ const userSecurityController = {
 
   /**
    * 添加IP到白名单
+   * 只有管理员可以执行此操作
    */
   async addIpToWhitelist(req, res) {
     try {
+      // 检查用户是否为管理员
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({
+          message: '权限不足，只有管理员可以配置IP白名单'
+        });
+      }
+
       const { ip } = req.body;
       if (!ip) {
         return res.status(400).json({
@@ -174,9 +182,17 @@ const userSecurityController = {
 
   /**
    * 从白名单中移除IP
+   * 只有管理员可以执行此操作
    */
   async removeIpFromWhitelist(req, res) {
     try {
+      // 检查用户是否为管理员
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({
+          message: '权限不足，只有管理员可以配置IP白名单'
+        });
+      }
+
       const { ip } = req.body;
       if (!ip) {
         return res.status(400).json({
@@ -209,9 +225,17 @@ const userSecurityController = {
 
   /**
    * 清空IP白名单
+   * 只有管理员可以执行此操作
    */
   async clearIpWhitelist(req, res) {
     try {
+      // 检查用户是否为管理员
+      if (req.user.role !== 'admin') {
+        return res.status(403).json({
+          message: '权限不足，只有管理员可以配置IP白名单'
+        });
+      }
+
       const user = await User.findById(req.user._id);
       if (!user) {
         return res.status(404).json({
